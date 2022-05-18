@@ -1,1 +1,3 @@
-GDBToShp/input/*.gdb
+*.gdb
+#Python
+*.py[cod]
