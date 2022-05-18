@@ -8,6 +8,7 @@ from util import getGDBs
 [message,GDBs] = getGDBs()
 
 print(message,GDBs)
+# 修改了
 # env.workspace = "C:/Users/pc/Desktop/Practice/GDBToShp/input"
 # in_features = "四川省生态保护红线.gdb"
 # out_feature_class = "C:/Users/pc/Desktop/Practice/GDBToShp/output/STBHHX_200.shp"
