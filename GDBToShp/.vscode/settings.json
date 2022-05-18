@@ -1,0 +1,38 @@
+{
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+            "path": "C:\\Program Files\\Git\\git-bash.exe"
+        },
+    },
+    
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "python.defaultInterpreterPath": "",
+    "extensions.autoUpdate": false,
+    "python.condaPath": "F:\\python310\\python.exe",
+    "python.autoComplete.extraPaths": [
+    
+    ],
+    "python.analysis.extraPaths": [],
+
+    "editor.fontSize": 15,
+    "terminal.integrated.shellArgs.windows": ["/K chcp 65001 >nul"],
+    "terminal.integrated.fontFamily": "Lucida Console",
+    "terminal.integrated.shellArgs.windows": [
+        "-NoExit",
+        "/c",
+        "chcp 65001"
+    ],
+    "files.encoding": "gbk",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/*.pyc": true,
+        "**/.DS_Store": true,
+        "**/*.pyc":true
+        },
+}
