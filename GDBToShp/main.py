@@ -1,18 +1,29 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 import arcpy
 import os.path
 from arcpy import env
 from config import PATHS as paths
 from util import getGDBs
 
+# read gdb file
 [message,GDBs] = getGDBs()
-
 print(message,GDBs)
-# ĞŞ¸ÄÁË
+
+City = "City"
+County = "County"
+CountyCode = "CountyCode"
+
+CodeObjects = {
+    1:{City : "æˆéƒ½å¸‚", County : "é”¦æ±ŸåŒº",CountyCode : "510104"},
+    2:{City : "æˆéƒ½å¸‚", County : "é’ç¾ŠåŒº",CountyCode : "510105"},
+}
+
+print(CodeObjects[1][City])
+
 # env.workspace = "C:/Users/pc/Desktop/Practice/GDBToShp/input"
-# in_features = "ËÄ´¨Ê¡ÉúÌ¬±£»¤ºìÏß.gdb"
+# in_features = "å››å·çœç”Ÿæ€ä¿æŠ¤çº¢çº¿.gdb"
 # out_feature_class = "C:/Users/pc/Desktop/Practice/GDBToShp/output/STBHHX_200.shp"
-# # °¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ-Âí¶û¿µÊĞ
+# # é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·-é©¬å°”åº·å¸‚
 # countyCode = 201
 # where_clause = '"FID" = ' + str(countyCode)
 # arcpy.Select_analysis(in_features,out_feature_class,where_clause)
