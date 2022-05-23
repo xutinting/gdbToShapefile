@@ -1,29 +1,31 @@
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
 import arcpy
-import os.path
-from arcpy import env
-from config import PATHS as paths
-from util import getGDBs
+import os
+from config import PATHS
+from util import getGDBs,listFeatureDatasets,admin_codes
 
-# read gdb file
-[message,GDBs] = getGDBs()
-print(message,GDBs)
+GDBs = getGDBs()
 
-City = "City"
-County = "County"
-CountyCode = "CountyCode"
+# 输入文件夹路径
+input_path = PATHS['input_path']
+# 输出文件夹路径
+output_path = PATHS['output_path']
 
-CodeObjects = {
-    1:{City : "成都市", County : "锦江区",CountyCode : "510104"},
-    2:{City : "成都市", County : "青羊区",CountyCode : "510105"},
-}
+for admin_code in admin_codes:
+    # 创建目录
+    city = admin_code['City']
+    county = admin_code['County']
+    county_code = admin_code['CountyCode']
+    county_path = (output_path + '\\' + city + '\\' + county_code + county)
+    print(county_path)
+    break
+    if not os.path.exists(county_path):
+        os.makedirs( county_path )
+    # 选择图斑
+    gdb = GDBs[0]
+    [message, featuresDatasetsNames,gdbName] = listFeatureDatasets(gdb)
+    in_features = gdb
+    out_feature_class = county_path + "\\" + "STBHHX_2019.shp"
+    where_clause = "行政区划代码 = " + county_code
+    arcpy.Select_analysis(in_features,out_feature_class,where_clause)
 
-print(CodeObjects[1][City])
-
-# env.workspace = "C:/Users/pc/Desktop/Practice/GDBToShp/input"
-# in_features = "四川省生态保护红线.gdb"
-# out_feature_class = "C:/Users/pc/Desktop/Practice/GDBToShp/output/STBHHX_200.shp"
-# # 阿坝藏族羌族自治州-马尔康市
-# countyCode = 201
-# where_clause = '"FID" = ' + str(countyCode)
-# arcpy.Select_analysis(in_features,out_feature_class,where_clause)
