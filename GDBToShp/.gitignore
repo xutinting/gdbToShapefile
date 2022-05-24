@@ -1,0 +1,8 @@
+*.gdb
+*.pyc
+*.gitkeep
+input/*
+!input/.gitkeep
+output/*
+!output/.gitkeep
+

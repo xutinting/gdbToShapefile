@@ -1,11 +1,9 @@
 # -*- coding: UTF-8 -*-
-import arcpy
 import os
-import sys
-import traceback
 from config import PATHS
 
 input_path = PATHS['input_path']
+output_path = PATHS['output_path']
 
 def getGDBs():
     dirlist = os.listdir(input_path)
@@ -14,271 +12,217 @@ def getGDBs():
     for dir in dirlist:
         extension = os.path.splitext(dir)[1]
 
-    if ".gdb" in dir: #Èç¹ûÂ·¾¶Ãû³ÆÖĞ°üº¬ .gdb ×Ö·û´®
-        gdblist.append(input_path+"\\"+dir) #½«GDBÊı¾İ¿âµÄÂ·¾¶Ìí¼Óµ½gdblistÁĞ±íÖĞ
+    if ".gdb" in dir: #å¦‚æœè·¯å¾„åç§°ä¸­åŒ…å« .gdb å­—ç¬¦ä¸²
+        gdblist.append(input_path+"\\"+dir) #å°†GDBæ•°æ®åº“çš„è·¯å¾„æ·»åŠ åˆ°gdbliståˆ—è¡¨ä¸­
 
     return gdblist
 
-def getFormattedException():
-    excType, excValue, excTb = sys.exc_info()
-    formattedException = traceback.format_exception(excType, excValue, excTb)
-
-    return '\n'.join(formattedException)
-
-
-def listFeatureDatasets(gdb):
-    featuresDatasetsExists = False
-
-    try:
-        arcpy.env.workspace = gdb
-
-        gdbName = os.path.splitext(os.path.basename(gdb))[0]
-
-        featureDatasetsNames = arcpy.ListDatasets('*', 'Feature')
-
-        if len(featureDatasetsNames) == 0:
-            message = 'There is no dataset in the file geodatabase {}\n'.format(gdbName)
-
-            return [False, featuresDatasetsExists, message, featureDatasetsNames]
-
-        featuresDatasetsExists = True
-
-        featuresDatasetsNames = []
-        for featureDatasetName in featureDatasetsNames:
-            dataset = os.path.join(gdb, featureDatasetName)
-
-            datasetType = arcpy.Describe(dataset).datasetType
-
-            if datasetType == 'FeatureDataset':
-                featuresDatasetsNames.append(featureDatasetName)
-
-        message = 'The datasets from file geodatabase {} were successfully listed\n'.format(gdbName)
-
-        return [True, featuresDatasetsExists, message, featuresDatasetsNames]
-
-    except:
-        formattedException = getFormattedException()
-
-        message = 'There was a problem while listing datasets.\nError:\n{}\n'.format(formattedException)
-
-        return [False, featuresDatasetsExists, message, '']
-
-
-def judge(gdb, field):
-    fields = arcpy.ListFields(gdb)
-    for fd in fields:
-        if fd.name == field:
-            if fd.length >= 32:
-                return 1
-            else:
-                return 0
-
 admin_codes = [
-{ 'City' : '³É¶¼ÊĞ', 'County' : '½õ½­Çø', 'CountyCode' : '510104' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÇàÑòÇø', 'CountyCode' : '510105'},
-{ 'City' : '³É¶¼ÊĞ', 'County' : '½ğÅ£Çø', 'CountyCode' : '510106' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÎäºîÇø', 'CountyCode' : '510107' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '³É»ªÇø', 'CountyCode' : '510108' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '¸ßĞÂÇø', 'CountyCode' : '510109' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'Ìì¸®ĞÂÇø³É¶¼Ö±¹ÜÇø', 'CountyCode' : '510110'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÁúÈªæäÇø', 'CountyCode' : '510112'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'Çà°×½­Çø', 'CountyCode' : '510113'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ĞÂ¶¼Çø', 'CountyCode' : '510114'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÎÂ½­Çø', 'CountyCode' : '510115' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'Ë«Á÷Çø', 'CountyCode' : '510116' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'Û¯¶¼Çø', 'CountyCode' : '510117'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '½ğÌÃÏØ', 'CountyCode' : '510121'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '´óÒØÏØ', 'CountyCode' : '510129' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÆÑ½­ÏØ', 'CountyCode' : '510131'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ĞÂ½òÏØ', 'CountyCode' : '510118'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '¶¼½­ÑßÊĞ', 'CountyCode' : '510181'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÅíÖİÊĞ', 'CountyCode' : '510182'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : 'ÚöáÁÊĞ', 'CountyCode' : '510183' },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '³çÖİÊĞ', 'CountyCode' : '510184'  },
-{ 'City' : '³É¶¼ÊĞ', 'County' : '¼òÑôÊĞ', 'CountyCode' : '510185'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é”¦æ±ŸåŒº', 'CountyCode' : '510104' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é’ç¾ŠåŒº', 'CountyCode' : '510105'},
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é‡‘ç‰›åŒº', 'CountyCode' : '510106' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'æ­¦ä¾¯åŒº', 'CountyCode' : '510107' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'æˆååŒº', 'CountyCode' : '510108' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é«˜æ–°åŒº', 'CountyCode' : '510109' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'å¤©åºœæ–°åŒºæˆéƒ½ç›´ç®¡åŒº', 'CountyCode' : '510110'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é¾™æ³‰é©¿åŒº', 'CountyCode' : '510112'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é’ç™½æ±ŸåŒº', 'CountyCode' : '510113'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'æ–°éƒ½åŒº', 'CountyCode' : '510114'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'æ¸©æ±ŸåŒº', 'CountyCode' : '510115' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'åŒæµåŒº', 'CountyCode' : '510116' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'éƒ«éƒ½åŒº', 'CountyCode' : '510117'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é‡‘å ‚å¿', 'CountyCode' : '510121'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'å¤§é‚‘å¿', 'CountyCode' : '510129' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'è’²æ±Ÿå¿', 'CountyCode' : '510131'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'æ–°æ´¥å¿', 'CountyCode' : '510118'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'éƒ½æ±Ÿå °å¸‚', 'CountyCode' : '510181'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'å½­å·å¸‚', 'CountyCode' : '510182'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'é‚›å´ƒå¸‚', 'CountyCode' : '510183' },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'å´‡å·å¸‚', 'CountyCode' : '510184'  },
+{ 'City' :  u'æˆéƒ½å¸‚', 'County' : u'ç®€é˜³å¸‚', 'CountyCode' : '510185'  },
 
-{ 'City' : '×Ô¹±ÊĞ', 'County' : '×ÔÁ÷¾®Çø', 'CountyCode' : '510302' },
-{ 'City' : '×Ô¹±ÊĞ', 'County' : '¹±¾®Çø', 'CountyCode' : '510303'  },
-{ 'City' : '×Ô¹±ÊĞ', 'County' : '´ó°²Çø', 'CountyCode' : '510304' },
-{ 'City' : '×Ô¹±ÊĞ', 'County' : 'ÑØÌ²Çø', 'CountyCode' : '510311' },
-{ 'City' : '×Ô¹±ÊĞ', 'County' : 'ÈÙÏØ', 'CountyCode' : '510321' },
-{ 'City' : '×Ô¹±ÊĞ', 'County' : '¸»Ë³ÏØ', 'CountyCode' : '510322' },
+{ 'City' :  u'è‡ªè´¡å¸‚', 'County' : u'è‡ªæµäº•åŒº', 'CountyCode' : '510302' },
+{ 'City' :  u'è‡ªè´¡å¸‚', 'County' : u'è´¡äº•åŒº', 'CountyCode' : '510303'  },
+{ 'City' :  u'è‡ªè´¡å¸‚', 'County' : u'å¤§å®‰åŒº', 'CountyCode' : '510304' },
+{ 'City' :  u'è‡ªè´¡å¸‚', 'County' : u'æ²¿æ»©åŒº', 'CountyCode' : '510311' },
+{ 'City' :  u'è‡ªè´¡å¸‚', 'County' : u'è£å¿', 'CountyCode' : '510321' },
+{ 'City' :  u'è‡ªè´¡å¸‚', 'County' : u'å¯Œé¡ºå¿', 'CountyCode' : '510322' },
 
-{ 'City' : 'ÅÊÖ¦»¨ÊĞ', 'County' : '¶«Çø', 'CountyCode' : '510402'},
-{ 'City' : 'ÅÊÖ¦»¨ÊĞ', 'County' : 'Î÷Çø', 'CountyCode' : '510403'},
-{ 'City' : 'ÅÊÖ¦»¨ÊĞ', 'County' : 'ÈÊºÍÇø', 'CountyCode' : '510411' },
-{ 'City' : 'ÅÊÖ¦»¨ÊĞ', 'County' : 'Ã×Ò×ÏØ', 'CountyCode' : '510421'},
-{ 'City' : 'ÅÊÖ¦»¨ÊĞ', 'County' : 'ÑÎ±ßÏØ', 'CountyCode' : '510422' },
+{ 'City' :  u'æ”€æèŠ±å¸‚', 'County' : u'ä¸œåŒº', 'CountyCode' : '510402'},
+{ 'City' :  u'æ”€æèŠ±å¸‚', 'County' : u'è¥¿åŒº', 'CountyCode' : '510403'},
+{ 'City' :  u'æ”€æèŠ±å¸‚', 'County' : u'ä»å’ŒåŒº', 'CountyCode' : '510411' },
+{ 'City' :  u'æ”€æèŠ±å¸‚', 'County' : u'ç±³æ˜“å¿', 'CountyCode' : '510421'},
+{ 'City' :  u'æ”€æèŠ±å¸‚', 'County' : u'ç›è¾¹å¿', 'CountyCode' : '510422' },
 
-{ 'City' : 'ãòÖİÊĞ', 'County' : '½­ÑôÇø', 'CountyCode' : '510502' },
-{ 'City' : 'ãòÖİÊĞ', 'County' : 'ÄÉÏªÇø', 'CountyCode' : '510503' },
-{ 'City' : 'ãòÖİÊĞ', 'County' : 'ÁúÂíÌ¶Çø', 'CountyCode' : '510504'},
-{ 'City' : 'ãòÖİÊĞ', 'County' : 'ãòÏØ', 'CountyCode' : '510521' },
-{ 'City' : 'ãòÖİÊĞ', 'County' : 'ºÏ½­ÏØ', 'CountyCode' : '510522'},
-{ 'City' : 'ãòÖİÊĞ', 'County' : 'ĞğÓÀÏØ', 'CountyCode' : '510524'},
-{ 'City' : 'ãòÖİÊĞ', 'County' : '¹ÅİşÏØ', 'CountyCode' : '510525'},
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'æ±Ÿé˜³åŒº', 'CountyCode' : '510502' },
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'çº³æºªåŒº', 'CountyCode' : '510503' },
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'é¾™é©¬æ½­åŒº', 'CountyCode' : '510504'},
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'æ³¸å¿', 'CountyCode' : '510521' },
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'åˆæ±Ÿå¿', 'CountyCode' : '510522'},
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'å™æ°¸å¿', 'CountyCode' : '510524'},
+{ 'City' :  u'æ³¸å·å¸‚', 'County' : u'å¤è”ºå¿', 'CountyCode' : '510525'},
 
-{ 'City' : 'µÂÑôÊĞ', 'County' : 'ìºÑôÇø', 'CountyCode' : '510603'},
-{ 'City' : 'µÂÑôÊĞ', 'County' : 'ÂŞ½­Çø', 'CountyCode' : '510604'},
-{ 'City' : 'µÂÑôÊĞ', 'County' : 'ÖĞ½­ÏØ', 'CountyCode' : '510623'},
-{ 'City' : 'µÂÑôÊĞ', 'County' : '¹ãººÊĞ', 'CountyCode' : '510681'},
-{ 'City' : 'µÂÑôÊĞ', 'County' : 'Ê²ÚúÊĞ', 'CountyCode' : '510682'},
-{ 'City' : 'µÂÑôÊĞ', 'County' : 'ÃàÖñÊĞ', 'CountyCode' : '510683' },
+{ 'City' :  u'å¾·é˜³å¸‚', 'County' : u'æ—Œé˜³åŒº', 'CountyCode' : '510603'},
+{ 'City' :  u'å¾·é˜³å¸‚', 'County' : u'ç½—æ±ŸåŒº', 'CountyCode' : '510604'},
+{ 'City' :  u'å¾·é˜³å¸‚', 'County' : u'ä¸­æ±Ÿå¿', 'CountyCode' : '510623'},
+{ 'City' :  u'å¾·é˜³å¸‚', 'County' : u'å¹¿æ±‰å¸‚', 'CountyCode' : '510681'},
+{ 'City' :  u'å¾·é˜³å¸‚', 'County' : u'ä»€é‚¡å¸‚', 'CountyCode' : '510682'},
+{ 'City' :  u'å¾·é˜³å¸‚', 'County' : u'ç»µç«¹å¸‚', 'CountyCode' : '510683' },
 
-{ 'City' : 'ÃàÑôÊĞ', 'County' : '¸¢³ÇÇø', 'CountyCode' : '510703'},
-{ 'City' : 'ÃàÑôÊĞ', 'County' : 'ÓÎÏÉÇø', 'CountyCode' : '510704'},
-{ 'City' : 'ÃàÑôÊĞ', 'County' : '°²ÖİÇø', 'CountyCode' : '510705' },
-{ 'City' : 'ÃàÑôÊĞ', 'County' : 'ÈıÌ¨ÏØ', 'CountyCode' : '510722'},
-{ 'City' : 'ÃàÑôÊĞ', 'County' : 'ÑÎÍ¤ÏØ', 'CountyCode' : '510723'},
-{ 'City' : 'ÃàÑôÊĞ', 'County' : 'è÷äüÏØ', 'CountyCode' : '510725'},
-{ 'City' : 'ÃàÑôÊĞ', 'County' : '±±´¨Ç¼×å×ÔÖÎÏØ', 'CountyCode' : '510726' },
-{ 'City' : 'ÃàÑôÊĞ', 'County' : 'Æ½ÎäÏØ', 'CountyCode' : '510727' },
-{ 'City' : 'ÃàÑôÊĞ', 'County' : '½­ÓÍÊĞ', 'CountyCode' : '510781'},
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'æ¶ªåŸåŒº', 'CountyCode' : '510703'},
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'æ¸¸ä»™åŒº', 'CountyCode' : '510704'},
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'å®‰å·åŒº', 'CountyCode' : '510705' },
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'ä¸‰å°å¿', 'CountyCode' : '510722'},
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'ç›äº­å¿', 'CountyCode' : '510723'},
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'æ¢“æ½¼å¿', 'CountyCode' : '510725'},
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'åŒ—å·ç¾Œæ—è‡ªæ²»å¿', 'CountyCode' : '510726' },
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'å¹³æ­¦å¿', 'CountyCode' : '510727' },
+{ 'City' :  u'ç»µé˜³å¸‚', 'County' : u'æ±Ÿæ²¹å¸‚', 'CountyCode' : '510781'},
 
-{ 'City' : '¹ãÔªÊĞ', 'County' : 'ÀûÖİÇø', 'CountyCode' : '510802' },
-{ 'City' : '¹ãÔªÊĞ', 'County' : 'ÕÑ»¯Çø', 'CountyCode' : '510811' },
-{ 'City' : '¹ãÔªÊĞ', 'County' : '³¯ÌìÇø', 'CountyCode' : '510812'},
-{ 'City' : '¹ãÔªÊĞ', 'County' : 'Íú²ÔÏØ', 'CountyCode' : '510821'},
-{ 'City' : '¹ãÔªÊĞ', 'County' : 'Çà´¨ÏØ', 'CountyCode' : '510822'},
-{ 'City' : '¹ãÔªÊĞ', 'County' : '½£¸óÏØ', 'CountyCode' : '510823'},
-{ 'City' : '¹ãÔªÊĞ', 'County' : '²ÔÏªÏØ', 'CountyCode' : '510824'},
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'åˆ©å·åŒº', 'CountyCode' : '510802' },
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'æ˜­åŒ–åŒº', 'CountyCode' : '510811' },
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'æœå¤©åŒº', 'CountyCode' : '510812'},
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'æ—ºè‹å¿', 'CountyCode' : '510821'},
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'é’å·å¿', 'CountyCode' : '510822'},
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'å‰‘é˜å¿', 'CountyCode' : '510823'},
+{ 'City' :  u'å¹¿å…ƒå¸‚', 'County' : u'è‹æºªå¿', 'CountyCode' : '510824'},
 
-{ 'City' : 'ËìÄşÊĞ', 'County' : '´¬É½Çø', 'CountyCode' : '510903' },
-{ 'City' : 'ËìÄşÊĞ', 'County' : '°²¾ÓÇø', 'CountyCode' : '510904'},
-{ 'City' : 'ËìÄşÊĞ', 'County' : 'ÅîÏªÏØ', 'CountyCode' : '510921'},
-{ 'City' : 'ËìÄşÊĞ', 'County' : 'ÉäºéÏØ', 'CountyCode' : '510922'},
-{ 'City' : 'ËìÄşÊĞ', 'County' : '´óÓ¢ÏØ', 'CountyCode' : '510923'},
+{ 'City' :  u'é‚å®å¸‚', 'County' : u'èˆ¹å±±åŒº', 'CountyCode' : '510903' },
+{ 'City' :  u'é‚å®å¸‚', 'County' : u'å®‰å±…åŒº', 'CountyCode' : '510904'},
+{ 'City' :  u'é‚å®å¸‚', 'County' : u'è“¬æºªå¿', 'CountyCode' : '510921'},
+{ 'City' :  u'é‚å®å¸‚', 'County' : u'å°„æ´ªå¿', 'CountyCode' : '510922'},
+{ 'City' :  u'é‚å®å¸‚', 'County' : u'å¤§è‹±å¿', 'CountyCode' : '510923'},
 
-{ 'City' : 'ÄÚ½­ÊĞ', 'County' : 'ÊĞÖĞÇø', 'CountyCode' : '511002'},
-{ 'City' : 'ÄÚ½­ÊĞ', 'County' : '¶«ĞËÇø', 'CountyCode' : '511011'},
-{ 'City' : 'ÄÚ½­ÊĞ', 'County' : 'ÍşÔ¶ÏØ', 'CountyCode' : '511024' },
-{ 'City' : 'ÄÚ½­ÊĞ', 'County' : '×ÊÖĞÏØ', 'CountyCode' : '511025' },
-{ 'City' : 'ÄÚ½­ÊĞ', 'County' : 'Â¡²ıÊĞ', 'CountyCode' : '511083' },
+{ 'City' :  u'å†…æ±Ÿå¸‚', 'County' : u'å¸‚ä¸­åŒº', 'CountyCode' : '511002'},
+{ 'City' :  u'å†…æ±Ÿå¸‚', 'County' : u'ä¸œå…´åŒº', 'CountyCode' : '511011'},
+{ 'City' :  u'å†…æ±Ÿå¸‚', 'County' : u'å¨è¿œå¿', 'CountyCode' : '511024' },
+{ 'City' :  u'å†…æ±Ÿå¸‚', 'County' : u'èµ„ä¸­å¿', 'CountyCode' : '511025' },
+{ 'City' :  u'å†…æ±Ÿå¸‚', 'County' : u'éš†æ˜Œå¸‚', 'CountyCode' : '511083' },
 
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : 'ÊĞÖĞÇø', 'CountyCode' : '511102'},
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : 'É³ÍåÇø', 'CountyCode' : '511111'},
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : 'ÎåÍ¨ÇÅÇø', 'CountyCode' : '511112'},
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : '½ğ¿ÚºÓÇø', 'CountyCode' : '511113'},
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : 'êùÎªÏØ', 'CountyCode' : '511123' },
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : '¾®ÑĞÏØ', 'CountyCode' : '511124'  },
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : '¼Ğ½­ÏØ', 'CountyCode' : '511126'  },
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : 'ãå´¨ÏØ', 'CountyCode' : '511129' },
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : '¶ë±ßÒÍ×å×ÔÖÎÏØ', 'CountyCode' : '511132' },
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : 'Âí±ßÒÍ×å×ÔÖÎÏØ', 'CountyCode' : '511133'  },
-{ 'City' : 'ÀÖÉ½ÊĞ', 'County' : '¶ëÃ¼É½ÊĞ', 'CountyCode' : '511181'},
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'å¸‚ä¸­åŒº', 'CountyCode' : '511102'},
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'æ²™æ¹¾åŒº', 'CountyCode' : '511111'},
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'äº”é€šæ¡¥åŒº', 'CountyCode' : '511112'},
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'é‡‘å£æ²³åŒº', 'CountyCode' : '511113'},
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'çŠä¸ºå¿', 'CountyCode' : '511123' },
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'äº•ç ”å¿', 'CountyCode' : '511124'  },
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'å¤¹æ±Ÿå¿', 'CountyCode' : '511126'  },
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'æ²å·å¿', 'CountyCode' : '511129' },
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'å³¨è¾¹å½æ—è‡ªæ²»å¿', 'CountyCode' : '511132' },
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'é©¬è¾¹å½æ—è‡ªæ²»å¿', 'CountyCode' : '511133'  },
+{ 'City' :  u'ä¹å±±å¸‚', 'County' : u'å³¨çœ‰å±±å¸‚', 'CountyCode' : '511181'},
 
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'Ë³ÇìÇø', 'CountyCode' : '511302'  },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : '¸ßÆºÇø', 'CountyCode' : '511303'  },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : '¼ÎÁêÇø', 'CountyCode' : '511304'  },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'ÄÏ²¿ÏØ', 'CountyCode' : '511321' },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'ÓªÉ½ÏØ', 'CountyCode' : '511322' },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'Åî°²ÏØ', 'CountyCode' : '511323'  },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'ÒÇÂ¤ÏØ', 'CountyCode' : '511324'  },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'Î÷³äÏØ', 'CountyCode' : '511325'  },
-{ 'City' : 'ÄÏ³äÊĞ', 'County' : 'ãÏÖĞÊĞ', 'CountyCode' : '511381'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'é¡ºåº†åŒº', 'CountyCode' : '511302'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'é«˜åªåŒº', 'CountyCode' : '511303'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'å˜‰é™µåŒº', 'CountyCode' : '511304'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'å—éƒ¨å¿', 'CountyCode' : '511321' },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'è¥å±±å¿', 'CountyCode' : '511322' },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'è“¬å®‰å¿', 'CountyCode' : '511323'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'ä»ªé™‡å¿', 'CountyCode' : '511324'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'è¥¿å……å¿', 'CountyCode' : '511325'  },
+{ 'City' :  u'å—å……å¸‚', 'County' : u'é˜†ä¸­å¸‚', 'CountyCode' : '511381'  },
 
-{ 'City' : 'Ã¼É½ÊĞ', 'County' : '¶«ÆÂÇø', 'CountyCode' : '511402'  },
-{ 'City' : 'Ã¼É½ÊĞ', 'County' : 'ÈÊÊÙÏØ', 'CountyCode' : '511421'  },
-{ 'City' : 'Ã¼É½ÊĞ', 'County' : 'ÅíÉ½Çø', 'CountyCode' : '511403'  },
-{ 'City' : 'Ã¼É½ÊĞ', 'County' : 'ºéÑÅÏØ', 'CountyCode' : '511423' },
-{ 'City' : 'Ã¼É½ÊĞ', 'County' : 'µ¤ÀâÏØ', 'CountyCode' : '511424' },
-{ 'City' : 'Ã¼É½ÊĞ', 'County' : 'ÇàÉñÏØ', 'CountyCode' : '511425'  },
+{ 'City' :  u'çœ‰å±±å¸‚', 'County' : u'ä¸œå¡åŒº', 'CountyCode' : '511402'  },
+{ 'City' :  u'çœ‰å±±å¸‚', 'County' : u'ä»å¯¿å¿', 'CountyCode' : '511421'  },
+{ 'City' :  u'çœ‰å±±å¸‚', 'County' : u'å½­å±±åŒº', 'CountyCode' : '511403'  },
+{ 'City' :  u'çœ‰å±±å¸‚', 'County' : u'æ´ªé›…å¿', 'CountyCode' : '511423' },
+{ 'City' :  u'çœ‰å±±å¸‚', 'County' : u'ä¸¹æ£±å¿', 'CountyCode' : '511424' },
+{ 'City' :  u'çœ‰å±±å¸‚', 'County' : u'é’ç¥å¿', 'CountyCode' : '511425'  },
 
-{ 'City' : 'ÒË±öÊĞ', 'County' : '´äÆÁÇø', 'CountyCode' : '511502'  },
-{ 'City' : 'ÒË±öÊĞ', 'County' : 'ĞğÖİÇø', 'CountyCode' : '511504'  },
-{ 'City' : 'ÒË±öÊĞ', 'County' : 'ÄÏÏªÇø', 'CountyCode' : '511503'  },
-{ 'City' : 'ÒË±öÊĞ', 'County' : '½­°²ÏØ', 'CountyCode' : '511523' },
-{ 'City' : 'ÒË±öÊĞ', 'County' : '³¤ÄşÏØ', 'CountyCode' : '511524' },
-{ 'City' : 'ÒË±öÊĞ', 'County' : '¸ßÏØ', 'CountyCode' : '511525' },
-{ 'City' : 'ÒË±öÊĞ', 'County' : 'çîÏØ', 'CountyCode' : '511526' },
-{ 'City' : 'ÒË±öÊĞ', 'County' : 'óŞÁ¬ÏØ', 'CountyCode' : '511527' },
-{ 'City' : 'ÒË±öÊĞ', 'County' : 'ĞËÎÄÏØ', 'CountyCode' : '511528' },
-{ 'City' : 'ÒË±öÊĞ', 'County' : 'ÆÁÉ½ÏØ', 'CountyCode' : '511529'  },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'ç¿ å±åŒº', 'CountyCode' : '511502'  },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'å™å·åŒº', 'CountyCode' : '511504'  },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'å—æºªåŒº', 'CountyCode' : '511503'  },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'æ±Ÿå®‰å¿', 'CountyCode' : '511523' },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'é•¿å®å¿', 'CountyCode' : '511524' },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'é«˜å¿', 'CountyCode' : '511525' },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'ç™å¿', 'CountyCode' : '511526' },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'ç­ è¿å¿', 'CountyCode' : '511527' },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'å…´æ–‡å¿', 'CountyCode' : '511528' },
+{ 'City' :  u'å®œå®¾å¸‚', 'County' : u'å±å±±å¿', 'CountyCode' : '511529'  },
 
-{ 'City' : '¹ã°²ÊĞ', 'County' : '¹ã°²Çø', 'CountyCode' : '511602' },
-{ 'City' : '¹ã°²ÊĞ', 'County' : 'Ç°·æÇø', 'CountyCode' : '511603'  },
-{ 'City' : '¹ã°²ÊĞ', 'County' : 'ÔÀ³ØÏØ', 'CountyCode' : '511621'  },
-{ 'City' : '¹ã°²ÊĞ', 'County' : 'ÎäÊ¤ÏØ', 'CountyCode' : '511622'  },
-{ 'City' : '¹ã°²ÊĞ', 'County' : 'ÁÚË®ÏØ', 'CountyCode' : '511623'  },
-{ 'City' : '¹ã°²ÊĞ', 'County' : '»ªİöÊĞ', 'CountyCode' : '511681'  },
+{ 'City' :  u'å¹¿å®‰å¸‚', 'County' : u'å¹¿å®‰åŒº', 'CountyCode' : '511602' },
+{ 'City' :  u'å¹¿å®‰å¸‚', 'County' : u'å‰é”‹åŒº', 'CountyCode' : '511603'  },
+{ 'City' :  u'å¹¿å®‰å¸‚', 'County' : u'å²³æ± å¿', 'CountyCode' : '511621'  },
+{ 'City' :  u'å¹¿å®‰å¸‚', 'County' : u'æ­¦èƒœå¿', 'CountyCode' : '511622'  },
+{ 'City' :  u'å¹¿å®‰å¸‚', 'County' : u'é‚»æ°´å¿', 'CountyCode' : '511623'  },
+{ 'City' :  u'å¹¿å®‰å¸‚', 'County' : u'åè“¥å¸‚', 'CountyCode' : '511681'  },
 
-{ 'City' : '´ïÖİÊĞ', 'County' : 'Í¨´¨Çø', 'CountyCode' : '511702' },
-{ 'City' : '´ïÖİÊĞ', 'County' : '´ï´¨Çø', 'CountyCode' : '511703' },
-{ 'City' : '´ïÖİÊĞ', 'County' : 'ĞûººÏØ', 'CountyCode' : '511722' },
-{ 'City' : '´ïÖİÊĞ', 'County' : '¿ª½­ÏØ', 'CountyCode' : '511723'  },
-{ 'City' : '´ïÖİÊĞ', 'County' : '´óÖñÏØ', 'CountyCode' : '511724' },
-{ 'City' : '´ïÖİÊĞ', 'County' : 'ÇşÏØ', 'CountyCode' : '511725' },
-{ 'City' : '´ïÖİÊĞ', 'County' : 'ÍòÔ´ÊĞ', 'CountyCode' : '511781' },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'é€šå·åŒº', 'CountyCode' : '511702' },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'è¾¾å·åŒº', 'CountyCode' : '511703' },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'å®£æ±‰å¿', 'CountyCode' : '511722' },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'å¼€æ±Ÿå¿', 'CountyCode' : '511723'  },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'å¤§ç«¹å¿', 'CountyCode' : '511724' },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'æ¸ å¿', 'CountyCode' : '511725' },
+{ 'City' :  u'è¾¾å·å¸‚', 'County' : u'ä¸‡æºå¸‚', 'CountyCode' : '511781' },
 
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'Óê³ÇÇø', 'CountyCode' : '511802'},
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'ÃûÉ½Çø', 'CountyCode' : '511803' },
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'Üş¾­ÏØ', 'CountyCode' : '511822'},
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'ººÔ´ÏØ', 'CountyCode' : '511823' },
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'Ê¯ÃŞÏØ', 'CountyCode' : '511824'},
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'ÌìÈ«ÏØ', 'CountyCode' : '511825'},
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : 'Â«É½ÏØ', 'CountyCode' : '511826' },
-{ 'City' : 'ÑÅ°²ÊĞ', 'County' : '±¦ĞËÏØ', 'CountyCode' : '511827' },
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'é›¨åŸåŒº', 'CountyCode' : '511802'},
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'åå±±åŒº', 'CountyCode' : '511803' },
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'è¥ç»å¿', 'CountyCode' : '511822'},
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'æ±‰æºå¿', 'CountyCode' : '511823' },
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'çŸ³æ£‰å¿', 'CountyCode' : '511824'},
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'å¤©å…¨å¿', 'CountyCode' : '511825'},
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'èŠ¦å±±å¿', 'CountyCode' : '511826' },
+{ 'City' :  u'é›…å®‰å¸‚', 'County' : u'å®å…´å¿', 'CountyCode' : '511827' },
 
-{ 'City' : '°ÍÖĞÊĞ', 'County' : '°ÍÖİÇø', 'CountyCode' : '511902' },
-{ 'City' : '°ÍÖĞÊĞ', 'County' : '¶÷ÑôÇø', 'CountyCode' : '511903' },
-{ 'City' : '°ÍÖĞÊĞ', 'County' : 'Í¨½­ÏØ', 'CountyCode' : '511921' },
-{ 'City' : '°ÍÖĞÊĞ', 'County' : 'ÄÏ½­ÏØ', 'CountyCode' : '511922' },
-{ 'City' : '°ÍÖĞÊĞ', 'County' : 'Æ½²ıÏØ', 'CountyCode' : '511923' },
+{ 'City' :  u'å·´ä¸­å¸‚', 'County' : u'å·´å·åŒº', 'CountyCode' : '511902' },
+{ 'City' :  u'å·´ä¸­å¸‚', 'County' : u'æ©é˜³åŒº', 'CountyCode' : '511903' },
+{ 'City' :  u'å·´ä¸­å¸‚', 'County' : u'é€šæ±Ÿå¿', 'CountyCode' : '511921' },
+{ 'City' :  u'å·´ä¸­å¸‚', 'County' : u'å—æ±Ÿå¿', 'CountyCode' : '511922' },
+{ 'City' :  u'å·´ä¸­å¸‚', 'County' : u'å¹³æ˜Œå¿', 'CountyCode' : '511923' },
 
-{ 'City' : '×ÊÑôÊĞ', 'County' : 'Ñã½­Çø', 'CountyCode' : '512002'  },
-{ 'City' : '×ÊÑôÊĞ', 'County' : '°²ÔÀÏØ', 'CountyCode' : '512021'  },
-{ 'City' : '×ÊÑôÊĞ', 'County' : 'ÀÖÖÁÏØ', 'CountyCode' : '512022' },
+{ 'City' :  u'èµ„é˜³å¸‚', 'County' : u'é›æ±ŸåŒº', 'CountyCode' : '512002'  },
+{ 'City' :  u'èµ„é˜³å¸‚', 'County' : u'å®‰å²³å¿', 'CountyCode' : '512021'  },
+{ 'City' :  u'èµ„é˜³å¸‚', 'County' : u'ä¹è‡³å¿', 'CountyCode' : '512022' },
 
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'Âí¶û¿µÊĞ', 'CountyCode' : '513201'},
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'ãë´¨ÏØ', 'CountyCode' : '513221' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'ÀíÏØ', 'CountyCode' : '513222' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'Ã¯ÏØ', 'CountyCode' : '513223' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'ËÉÅËÏØ', 'CountyCode' : '513224'  },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : '¾ÅÕ¯¹µÏØ', 'CountyCode' : '513225' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : '½ğ´¨ÏØ', 'CountyCode' : '513226' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'Ğ¡½ğÏØ', 'CountyCode' : '513227' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'ºÚË®ÏØ', 'CountyCode' : '513228' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'ÈÀÌÁÏØ', 'CountyCode' : '513230' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : '°¢°ÓÏØ', 'CountyCode' : '513231' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'Èô¶û¸ÇÏØ', 'CountyCode' : '513232' },
-{ 'City' : '°¢°Ó²Ø×åÇ¼×å×ÔÖÎÖİ', 'County' : 'ºìÔ­ÏØ', 'CountyCode' : '513233' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'é©¬å°”åº·å¸‚', 'CountyCode' : '513201'},
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'æ±¶å·å¿', 'CountyCode' : '513221' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'ç†å¿', 'CountyCode' : '513222' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'èŒ‚å¿', 'CountyCode' : '513223' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'æ¾æ½˜å¿', 'CountyCode' : '513224'  },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'ä¹å¯¨æ²Ÿå¿', 'CountyCode' : '513225' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'é‡‘å·å¿', 'CountyCode' : '513226' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'å°é‡‘å¿', 'CountyCode' : '513227' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'é»‘æ°´å¿', 'CountyCode' : '513228' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'å£¤å¡˜å¿', 'CountyCode' : '513230' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'é˜¿åå¿', 'CountyCode' : '513231' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'è‹¥å°”ç›–å¿', 'CountyCode' : '513232' },
+{ 'City' :  u'é˜¿åè—æ—ç¾Œæ—è‡ªæ²»å·', 'County' : u'çº¢åŸå¿', 'CountyCode' : '513233' },
 
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : '¿µ¶¨ÊĞ', 'CountyCode' : '513301' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'ãò¶¨ÏØ', 'CountyCode' : '513322' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'µ¤°ÍÏØ', 'CountyCode' : '513323'},
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : '¾ÅÁúÏØ', 'CountyCode' : '513324' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'ÑÅ½­ÏØ', 'CountyCode' : '513325' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'µÀæÚÏØ', 'CountyCode' : '513326' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'Â¯»ôÏØ', 'CountyCode' : '513327'},
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : '¸Ê×ÎÏØ', 'CountyCode' : '513328' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'ĞÂÁúÏØ', 'CountyCode' : '513329'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'µÂ¸ñÏØ', 'CountyCode' : '513330' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : '°×ÓñÏØ', 'CountyCode' : '513331'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'Ê¯ÇşÏØ', 'CountyCode' : '513332'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'É«´ïÏØ', 'CountyCode' : '513333'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'ÀíÌÁÏØ', 'CountyCode' : '513334'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : '°ÍÌÁÏØ', 'CountyCode' : '513335'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'Ïç³ÇÏØ', 'CountyCode' : '513336'  },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'µ¾³ÇÏØ', 'CountyCode' : '513337' },
-{ 'City' : '¸Ê×Î²Ø×å×ÔÖÎÖİ', 'County' : 'µÃÈÙÏØ', 'CountyCode' : '513338' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'åº·å®šå¸‚', 'CountyCode' : '513301' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'æ³¸å®šå¿', 'CountyCode' : '513322' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ä¸¹å·´å¿', 'CountyCode' : '513323'},
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ä¹é¾™å¿', 'CountyCode' : '513324' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'é›…æ±Ÿå¿', 'CountyCode' : '513325' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'é“å­šå¿', 'CountyCode' : '513326' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ç‚‰éœå¿', 'CountyCode' : '513327'},
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ç”˜å­œå¿', 'CountyCode' : '513328' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'æ–°é¾™å¿', 'CountyCode' : '513329'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'å¾·æ ¼å¿', 'CountyCode' : '513330' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ç™½ç‰å¿', 'CountyCode' : '513331'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'çŸ³æ¸ å¿', 'CountyCode' : '513332'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'è‰²è¾¾å¿', 'CountyCode' : '513333'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ç†å¡˜å¿', 'CountyCode' : '513334'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'å·´å¡˜å¿', 'CountyCode' : '513335'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ä¹¡åŸå¿', 'CountyCode' : '513336'  },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'ç¨»åŸå¿', 'CountyCode' : '513337' },
+{ 'City' :  u'ç”˜å­œè—æ—è‡ªæ²»å·', 'County' : u'å¾—è£å¿', 'CountyCode' : '513338' },
 
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'Î÷²ıÊĞ', 'CountyCode' : '513401' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'Ä¾Àï²Ø×å×ÔÖÎÏØ', 'CountyCode' : '513422' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'ÑÎÔ´ÏØ', 'CountyCode' : '513423' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'µÂ²ıÏØ', 'CountyCode' : '513424' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : '»áÀíÏØ', 'CountyCode' : '513425'},
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : '»á¶«ÏØ', 'CountyCode' : '513426'},
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'ÄşÄÏÏØ', 'CountyCode' : '513427' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'ÆÕ¸ñÏØ', 'CountyCode' : '513428'},
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : '²¼ÍÏÏØ', 'CountyCode' : '513429' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : '½ğÑôÏØ', 'CountyCode' : '513430'},
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'ÕÑ¾õÏØ', 'CountyCode' : '513431' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'Ï²µÂÏØ', 'CountyCode' : '513432' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'ÃáÄşÏØ', 'CountyCode' : '513433' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'Ô½Î÷ÏØ', 'CountyCode' : '513434' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : '¸ÊÂåÏØ', 'CountyCode' : '513435'},
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'ÃÀ¹ÃÏØ', 'CountyCode' : '513436' },
-{ 'City' : 'Á¹É½ÒÍ×å×ÔÖÎÖİ', 'County' : 'À×²¨ÏØ', 'CountyCode' : '513437' }
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'è¥¿æ˜Œå¸‚', 'CountyCode' : '513401' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'æœ¨é‡Œè—æ—è‡ªæ²»å¿', 'CountyCode' : '513422' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'ç›æºå¿', 'CountyCode' : '513423' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'å¾·æ˜Œå¿', 'CountyCode' : '513424' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'ä¼šç†å¿', 'CountyCode' : '513425'},
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'ä¼šä¸œå¿', 'CountyCode' : '513426'},
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'å®å—å¿', 'CountyCode' : '513427' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'æ™®æ ¼å¿', 'CountyCode' : '513428'},
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'å¸ƒæ‹–å¿', 'CountyCode' : '513429' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'é‡‘é˜³å¿', 'CountyCode' : '513430'},
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'æ˜­è§‰å¿', 'CountyCode' : '513431' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'å–œå¾·å¿', 'CountyCode' : '513432' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'å†•å®å¿', 'CountyCode' : '513433' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'è¶Šè¥¿å¿', 'CountyCode' : '513434' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'ç”˜æ´›å¿', 'CountyCode' : '513435'},
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'ç¾å§‘å¿', 'CountyCode' : '513436' },
+{ 'City' :  u'å‡‰å±±å½æ—è‡ªæ²»å·', 'County' : u'é›·æ³¢å¿', 'CountyCode' : '513437' }
 ]
 
 
