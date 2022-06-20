@@ -156,19 +156,19 @@ coordinate_list = [
     { 'city' : u"资阳市", 'county' : u"安岳县", 'county_code' : "512021", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
     { 'city' : u"资阳市", 'county' : u"乐至县", 'county_code' : "512022", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
 
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"马尔康市", 'county_code' : "513201", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"汶川县", 'county_code' : "513221", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"理县", 'county_code' : "513222", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"茂县", 'county_code' : "513223", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"松潘县", 'county_code' : "513224", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"九寨沟县", 'county_code' : "513225", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"金川县", 'county_code' : "513226", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"小金县", 'county_code' : "513227", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"黑水县", 'county_code' : "513228", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"壤塘县", 'county_code' : "513230", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"阿坝县", 'county_code' : "513231", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"若尔盖县", 'county_code' : "513232", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"阿坝藏族羌族自治州", 'county' : u"红原县", 'county_code' : "513233", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"马尔康市", 'county_code' : "513201", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"汶川县", 'county_code' : "513221", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"理县", 'county_code' : "513222", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"茂县", 'county_code' : "513223", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
+    { 'city' : u"阿坝州", 'county' : u"松潘县", 'county_code' : "513224", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
+    { 'city' : u"阿坝州", 'county' : u"九寨沟县", 'county_code' : "513225", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 },
+    { 'city' : u"阿坝州", 'county' : u"金川县", 'county_code' : "513226", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"小金县", 'county_code' : "513227", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"黑水县", 'county_code' : "513228", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"壤塘县", 'county_code' : "513230", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"阿坝县", 'county_code' : "513231", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"若尔盖县", 'county_code' : "513232", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"阿坝州", 'county' : u"红原县", 'county_code' : "513233", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
 
     { 'city' : u"甘孜藏族自治州", 'county' : u"康定市", 'county_code' : "513301", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
     { 'city' : u"甘孜藏族自治州", 'county' : u"泸定县", 'county_code' : "513322", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
@@ -189,23 +189,93 @@ coordinate_list = [
     { 'city' : u"甘孜藏族自治州", 'county' : u"稻城县", 'county_code' : "513337", 'name' : "CGCS2000_3_Degree_GK_Zone_33", 'wkid' : 4521 },
     { 'city' : u"甘孜藏族自治州", 'county' : u"得荣县", 'county_code' : "513338", 'name' : "CGCS2000_3_Degree_GK_Zone_33", 'wkid' : 4521 },
 
-    { 'city' : u"凉山彝族自治州", 'county' : u"西昌市", 'county_code' : "513401", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"木里藏族自治县", 'county_code' : "513422", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"盐源县", 'county_code' : "513423", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"德昌县", 'county_code' : "513424", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"会理县", 'county_code' : "513425", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"会东县", 'county_code' : "513426", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"宁南县", 'county_code' : "513427", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"普格县", 'county_code' : "513428", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"布拖县", 'county_code' : "513429", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"金阳县", 'county_code' : "513430", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"昭觉县", 'county_code' : "513431", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"喜德县", 'county_code' : "513432", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"冕宁县", 'county_code' : "513433", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"越西县", 'county_code' : "513434", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"甘洛县", 'county_code' : "513435", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"美姑县", 'county_code' : "513436", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
-    { 'city' : u"凉山彝族自治州", 'county' : u"雷波县", 'county_code' : "513437", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 }    
+    { 'city' : u"凉山州", 'county' : u"西昌市", 'county_code' : "513401", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"木里藏族自治县", 'county_code' : "513422", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"盐源县", 'county_code' : "513423", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"德昌县", 'county_code' : "513424", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"会理县", 'county_code' : "513425", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"会东县", 'county_code' : "513426", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"宁南县", 'county_code' : "513427", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"普格县", 'county_code' : "513428", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"布拖县", 'county_code' : "513429", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"金阳县", 'county_code' : "513430", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"昭觉县", 'county_code' : "513431", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"喜德县", 'county_code' : "513432", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"冕宁县", 'county_code' : "513433", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"越西县", 'county_code' : "513434", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"甘洛县", 'county_code' : "513435", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"美姑县", 'county_code' : "513436", 'name' : "CGCS2000_3_Degree_GK_Zone_34", 'wkid' : 4522 },
+    { 'city' : u"凉山州", 'county' : u"雷波县", 'county_code' : "513437", 'name' : "CGCS2000_3_Degree_GK_Zone_35", 'wkid' : 4523 }    
 ]
 
+# 判断city code
+def getCitycode(cityname):
+    city = {
+        '成都市':'510100',
+        '自贡市':'510300',
+        '攀枝花市':'510400',
+        '泸州市':'510500',
+        '德阳市':'510600',
+        '绵阳市':'510700',
+        '广元市':'510800',
+        '遂宁市':'510900',
+        '内江市':'511000',       
+        '乐山市':'511100',
+        '南充市':'511300',
+        '眉山市':'511400',
+        '宜宾市':'511500',
+        '广安市':'511600',
+        '达州市':'511700',
+        '雅安市':'511800',
+        '巴中市':'511900',
+        '资阳市':'512000',
+        '阿坝州':'513200',
+        '甘孜藏族自治州':'513300',
+        '凉山州':'513400',
+    }
 
+    if cityname == '成都市':
+        return '510100'
+    elif cityname == '自贡市':
+        return '510300'
+    elif cityname == '攀枝花市':
+        return '510400'
+    elif cityname == '泸州市':
+        return '510500'
+    elif cityname == '德阳市':
+        return '510600'
+    elif cityname == '绵阳市':
+        return '510700'
+    elif cityname == '广元市':
+        return '510800'
+    elif cityname == '遂宁市':
+        return '510900'
+    elif cityname == '内江市':
+        return '511000'       
+    elif cityname == '乐山市':
+        return '511100'
+    elif cityname == '南充市':
+        return '511300'
+    elif cityname == '眉山市':
+        return '511400'
+    elif cityname == '宜宾市':
+        return '511500'
+    elif cityname == '广安市':
+        return '511600'
+    elif cityname == '达州市':
+        return '511700'
+    elif cityname == '雅安市':
+        return '511800'
+    elif cityname == '巴中市':
+        return '511900'
+    elif cityname == '资阳市':
+        return '512000'
+    elif cityname == '阿坝州':
+        return '513200'
+    elif cityname == '甘孜藏族自治州':
+        return '513300'
+    elif cityname == '凉山州':
+        return '513400'
+    else:
+        return "Invalid Season"
+            
