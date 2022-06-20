@@ -44,6 +44,8 @@ for coordinate in coordinate_list:
         if not (spatialRefWkid == wkid):
             new_spatialRef = arcpy.SpatialReference(wkid)
             arcpy.DefineProjection_management(shapefileJBNT,new_spatialRef)
+    # 合并图层(将新增基本农田图层合并到基本农田图层)
+    
     # 创建文件夹 
     # county_path = (output_path + '/' + str(city_code) + city + '/' + county_code + county)
     # if not os.path.exists(county_path):
@@ -54,7 +56,6 @@ print("-------------------------Done!")
 
 
 
-# 合并图层(将新增基本农田图层合并到基本农田图层)
 # unite_cd = input_path + '/' + u'成都市边界' +'/'+ u'成都市_510100_子_边界.shp'
 # unite_cq = input_path + '/' + u'重庆市边界'+ '/' + u'重庆市_500000_子_边界.shp'
 # unite_result = output_path + '/' + 'result.shp'
