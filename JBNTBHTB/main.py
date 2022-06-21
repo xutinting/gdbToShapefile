@@ -16,7 +16,7 @@ for coordinate in coordinate_list:
     coordinate_name = coordinate['name']
     wkid = coordinate['wkid']
 
-    inWorkspace = input_path + '/' + 'JBNT' + '/' + str(city_code) + city + '/' + county_code + county +'/'+  '1.矢量数据'
+    inWorkspace = input_path + '/' + 'JBNT' + '/' + str(city_code) + city + '/' + county_code + county +'/'+  u'1.矢量数据'
     
     if (os.path.exists(inWorkspace)):
         if(county_code == '511702'):
@@ -25,7 +25,7 @@ for coordinate in coordinate_list:
             BHTB_shp = inWorkspace + '/' + county_code + '2014JBNTBHTB.shp'
 
         outWorkspace = output_path  + '/' + str(city_code) + city + '/' + county_code + county
-        outBHTB_shp = outWorkspace + '/' + county_code + '2022JBNTBHTB.shp'
+        transWkidBHTB = outWorkspace + '/' + county_code + 'JBNTBHTB.shp'
 
         if not os.path.exists(outWorkspace):
             os.makedirs(outWorkspace)
@@ -35,7 +35,7 @@ for coordinate in coordinate_list:
         spatialRef = arcpy.Describe(BHTB_shp).spatialReference
         spatialRefWkid = spatialRef.factoryCode
             # 判断wkid是否对应并纠正
-        if(os.path.exists(outBHTB_shp)):
+        if(os.path.exists(transWkidBHTB)):
             print("already processed!")
         else:
             if not (spatialRefWkid == wkid):
@@ -44,36 +44,32 @@ for coordinate in coordinate_list:
                 print(city)
                 print(county)
                 newSrRef = arcpy.SpatialReference(wkid)
-                arcpy.Project_management(BHTB_shp,outBHTB_shp,newSrRef)
-                print(arcpy.Describe(outBHTB_shp).spatialReference.factoryCode)
+                arcpy.Project_management(BHTB_shp,transWkidBHTB,newSrRef)
+                print(arcpy.Describe(transWkidBHTB).spatialReference.factoryCode)
                 print("--------------------------------------")
             else:
-                arcpy.Copy_management(BHTB_shp,outBHTB_shp,"")
+                arcpy.Copy_management(BHTB_shp,transWkidBHTB,"")
+        # 合并图层
+            # 筛选补划图斑
+        BH_shp = input_path + '/' + u'四川占用补划20220530' + '/' + u'补划图斑.shp'
+        BHQ_shp = input_path + '/' + inWorkspace + '/' + county_code + '2014JBNTBHQ.shp'
+        arcpy.MakeFeatureLayer_management(BH_shp,'BH_lyr')
+        intersectBH = arcpy.SelectLayerByLocation_management('BH_lyr',"INTERSECT",transWkidBHTB)
+        
+        outBHTB = outWorkspace + '/' + county_code + '2022JBNTBHTB.shp'
+        erase_shp = input_path + '/' + u'四川占用补划20220530' + '/' + u'占地项目.shp'
+        if (intersectBH):
+            # 定义合并字段      
+            fieldMappings = arcpy.FieldMappings()
+            fieldMappings.addTable()
+            unite_shp = outWorkspace + '/' + county_code + 'JBNT_unite.shp'
+            arcpy.Merge_management([intersectBH,transWkidBHTB],unite_shp,fieldMappings)
+        else:  
+            arcpy.Erase_analysis(transWkidBHTB,erase_shp,outBHTB)
 
-    # # 合并图层
-    #     # 筛选补划图斑
-    # bh_shp = input_path + '/' + u'四川占用补划20220530' + '/' + u'补划图斑.shp'
-    # arcpy.MakeFeatureLayer_management(bh_shp,"bh_shp")
-    # selectBh = arcpy.SelectLayerByLocation_management("bh_shp","INTERSECT",outBHTB_shp)
-    #     # 合并
-    # uniteDir = output_path + '/'+ str(city_code) + city + '/' + county_code + county + '/'
-    # arcpy.Merge_management([selectBh,outBHTB_shp],)
-    # outBh = output_path + '/' + 'bh' 
-    # arcpy.CopyFeatures_management(selectBh, outBh + '/' + 'test.shp')
 
 print("-------------------------Done!")
-
-# 测试
-# unite_cd = input_path + '/' + u'成都市边界' +'/'+ u'成都市_510100_子_边界.shp'
-# unite_cq = input_path + '/' + u'重庆市边界'+ '/' + u'重庆市_500000_子_边界.shp'
-# unite_result = output_path + '/' + 'result.shp'
-# arcpy.Merge_management([unite_cd, unite_cq], unite_result)
 
 # 擦除图层
 
 # 结果按行政区划目录输出
-
-    # 创建文件夹 
-    # county_path = (output_path + '/' + str(city_code) + city + '/' + county_code + county)
-    # if not os.path.exists(county_path):
-    #     os.makedirs(county_path)

@@ -211,71 +211,71 @@ coordinate_list = [
 # 判断city code
 def getCitycode(cityname):
     city = {
-        '成都市':'510100',
-        '自贡市':'510300',
-        '攀枝花市':'510400',
-        '泸州市':'510500',
-        '德阳市':'510600',
-        '绵阳市':'510700',
-        '广元市':'510800',
-        '遂宁市':'510900',
-        '内江市':'511000',       
-        '乐山市':'511100',
-        '南充市':'511300',
-        '眉山市':'511400',
-        '宜宾市':'511500',
-        '广安市':'511600',
-        '达州市':'511700',
-        '雅安市':'511800',
-        '巴中市':'511900',
-        '资阳市':'512000',
-        '阿坝州':'513200',
-        '甘孜藏族自治州':'513300',
-        '凉山州':'513400',
+        u'成都市':'510100',
+        u'自贡市':'510300',
+        u'攀枝花市':'510400',
+        u'泸州市':'510500',
+        u'德阳市':'510600',
+        u'绵阳市':'510700',
+        u'广元市':'510800',
+        u'遂宁市':'510900',
+        u'内江市':'511000',       
+        u'乐山市':'511100',
+        u'南充市':'511300',
+        u'眉山市':'511400',
+        u'宜宾市':'511500',
+        u'广安市':'511600',
+        u'达州市':'511700',
+        u'雅安市':'511800',
+        u'巴中市':'511900',
+        u'资阳市':'512000',
+        u'阿坝州':'513200',
+        u'甘孜藏族自治州':'513300',
+        u'凉山州':'513400',
     }
 
-    if cityname == '成都市':
+    if cityname == u'成都市':
         return '510100'
-    elif cityname == '自贡市':
+    elif cityname == u'自贡市':
         return '510300'
-    elif cityname == '攀枝花市':
+    elif cityname == u'攀枝花市':
         return '510400'
-    elif cityname == '泸州市':
+    elif cityname == u'泸州市':
         return '510500'
-    elif cityname == '德阳市':
+    elif cityname == u'德阳市':
         return '510600'
-    elif cityname == '绵阳市':
+    elif cityname == u'绵阳市':
         return '510700'
-    elif cityname == '广元市':
+    elif cityname == u'广元市':
         return '510800'
-    elif cityname == '遂宁市':
+    elif cityname == u'遂宁市':
         return '510900'
-    elif cityname == '内江市':
+    elif cityname == u'内江市':
         return '511000'       
-    elif cityname == '乐山市':
+    elif cityname == u'乐山市':
         return '511100'
-    elif cityname == '南充市':
+    elif cityname == u'南充市':
         return '511300'
-    elif cityname == '眉山市':
+    elif cityname == u'眉山市':
         return '511400'
-    elif cityname == '宜宾市':
+    elif cityname == u'宜宾市':
         return '511500'
-    elif cityname == '广安市':
+    elif cityname == u'广安市':
         return '511600'
-    elif cityname == '达州市':
+    elif cityname == u'达州市':
         return '511700'
-    elif cityname == '雅安市':
+    elif cityname == u'雅安市':
         return '511800'
-    elif cityname == '巴中市':
+    elif cityname == u'巴中市':
         return '511900'
-    elif cityname == '资阳市':
+    elif cityname == u'资阳市':
         return '512000'
-    elif cityname == '阿坝州':
+    elif cityname == u'阿坝州':
         return '513200'
-    elif cityname == '甘孜藏族自治州':
+    elif cityname == u'甘孜藏族自治州':
         return '513300'
-    elif cityname == '凉山州':
+    elif cityname == u'凉山州':
         return '513400'
     else:
         return "Invalid Season"
-            
+
