@@ -1,15 +1,11 @@
 # -*- coding: UTF-8 -*-
 import os
-import io
 import arcpy
 from util import coordinate_list,getCitycode
-from config import PATHS,workPath
+from config import PATHS
 
-arcpy.env.workspace = workPath
 input_path = PATHS['input_path']
 output_path = PATHS['output_path']
-# JBNT图层路径
-JBNT_path = input_path + '/' + 'JBNT'
 
 n = 0
 for coordinate in coordinate_list:
@@ -20,48 +16,64 @@ for coordinate in coordinate_list:
     coordinate_name = coordinate['name']
     wkid = coordinate['wkid']
 
-    arcpy.env.workspace = JBNT_path
-    # if(county == u"大邑县"):
-    #     n = n + 1
-    #     print(city)
-    #     print(city_code)
-    #     print(county_code)
-    #     print(county)
-    #     print(coordinate_name)
-    #     print(wkid)
-    #     print(n)
-    #     print("-----------------------")
+    inWorkspace = input_path + '/' + 'JBNT' + '/' + str(city_code) + city + '/' + county_code + county +'/'+  '1.矢量数据'
     
-    # 检查自定义坐标系，并纠正
-    workSpace = input_path + '/' + 'JBNT' + '/' + str(city_code) + city + '/' + county_code + county +'/'+  '1.矢量数据'
-    shapefileJBNT = workSpace + '/' + county_code + '2014JBNTBHTB.shp'
-    if(os.path.exists(shapefileJBNT)):
-        # 获取shp空间参考
-        spatialRef = arcpy.Describe(shapefileJBNT).spatialReference
-        spatialName = spatialRef.name
-        spatialRefWkid = spatialRef.factoryCode
-        # 判断wkid是否对应并纠正
-        if not (spatialRefWkid == wkid):
-            new_spatialRef = arcpy.SpatialReference(wkid)
-            arcpy.DefineProjection_management(shapefileJBNT,new_spatialRef)
-    # 合并图层(将新增基本农田图层合并到基本农田图层)
-    
-    # 创建文件夹 
-    # county_path = (output_path + '/' + str(city_code) + city + '/' + county_code + county)
-    # if not os.path.exists(county_path):
-    #     os.makedirs(county_path)
+    if (os.path.exists(inWorkspace)):
+        if(county_code == '511702'):
+            BHTB_shp = inWorkspace + '/' + county_code + '2015JBNTBHTB.shp'
+        else:
+            BHTB_shp = inWorkspace + '/' + county_code + '2014JBNTBHTB.shp'
 
+        outWorkspace = output_path  + '/' + str(city_code) + city + '/' + county_code + county
+        outBHTB_shp = outWorkspace + '/' + county_code + '2022JBNTBHTB.shp'
+
+        if not os.path.exists(outWorkspace):
+            os.makedirs(outWorkspace)
+        arcpy.env.workspace = inWorkspace
+        # 检查自定义坐标系，并纠正
+            # 获取原始数据shp文件空间参考
+        spatialRef = arcpy.Describe(BHTB_shp).spatialReference
+        spatialRefWkid = spatialRef.factoryCode
+            # 判断wkid是否对应并纠正
+        if(os.path.exists(outBHTB_shp)):
+            print("already processed!")
+        else:
+            if not (spatialRefWkid == wkid):
+                n = n + 1
+                print(n)
+                print(city)
+                print(county)
+                newSrRef = arcpy.SpatialReference(wkid)
+                arcpy.Project_management(BHTB_shp,outBHTB_shp,newSrRef)
+                print(arcpy.Describe(outBHTB_shp).spatialReference.factoryCode)
+                print("--------------------------------------")
+            else:
+                arcpy.Copy_management(BHTB_shp,outBHTB_shp,"")
+
+    # # 合并图层
+    #     # 筛选补划图斑
+    # bh_shp = input_path + '/' + u'四川占用补划20220530' + '/' + u'补划图斑.shp'
+    # arcpy.MakeFeatureLayer_management(bh_shp,"bh_shp")
+    # selectBh = arcpy.SelectLayerByLocation_management("bh_shp","INTERSECT",outBHTB_shp)
+    #     # 合并
+    # uniteDir = output_path + '/'+ str(city_code) + city + '/' + county_code + county + '/'
+    # arcpy.Merge_management([selectBh,outBHTB_shp],)
+    # outBh = output_path + '/' + 'bh' 
+    # arcpy.CopyFeatures_management(selectBh, outBh + '/' + 'test.shp')
 
 print("-------------------------Done!")
 
-
-
+# 测试
 # unite_cd = input_path + '/' + u'成都市边界' +'/'+ u'成都市_510100_子_边界.shp'
 # unite_cq = input_path + '/' + u'重庆市边界'+ '/' + u'重庆市_500000_子_边界.shp'
 # unite_result = output_path + '/' + 'result.shp'
 # arcpy.Merge_management([unite_cd, unite_cq], unite_result)
 
-# 擦除图层（将项目区占用图层从基本农田图层擦除）
+# 擦除图层
 
+# 结果按行政区划目录输出
 
-# 将结果按行政区划目录输出（按四川行政区划目录存储成果）
+    # 创建文件夹 
+    # county_path = (output_path + '/' + str(city_code) + city + '/' + county_code + county)
+    # if not os.path.exists(county_path):
+    #     os.makedirs(county_path)
