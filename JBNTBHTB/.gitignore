@@ -4,5 +4,6 @@
 input/*
 !input/.gitkeep
 output/*
+result/*
 !output/.gitkeep
 
