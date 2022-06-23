@@ -278,4 +278,3 @@ def getCitycode(cityname):
         return '513400'
     else:
         return "Invalid Season"
-

@@ -51,11 +51,15 @@ for coordinate in coordinate_list:
     JBNT_shp = inWorkspace + '/' + county_code + '2014JBNTBHTB.shp'
 
     resultJBNT = result_path + '/' + str(city_code) + city + '/' + county_code + county
-    print(city)
-    print(county)
-    print("loading--------------------")
+    outWorkspace = output_path  + '/' + str(city_code) + city + '/' + county_code + county
+    # 转换坐标系的基本农田图层
+    transWkidJBNT = outWorkspace + '/' + county_code + 'JBNT.shp'
+
+    # print(city)
+    # print(county)
+    # print("loading--------------------")
     if (os.path.exists(resultJBNT)):
-        print("already processed!")
+        pass
     elif (os.path.exists(inWorkspace)):
         if not (os.path.exists(JBNT_shp)):
             print(city)
@@ -63,10 +67,6 @@ for coordinate in coordinate_list:
             print("2014JBNTBHTB.shp don't exist")
             print("-------------")
         else:
-            outWorkspace = output_path  + '/' + str(city_code) + city + '/' + county_code + county
-            # 转换坐标系的基本农田图层
-            transWkidJBNT = outWorkspace + '/' + county_code + 'JBNT.shp'
-
             if not os.path.exists(outWorkspace):
                 os.makedirs(outWorkspace)
             arcpy.env.workspace = inWorkspace
@@ -83,11 +83,11 @@ for coordinate in coordinate_list:
                     print(n)
                     print(city)
                     print(county)
-                    print('该区需要纠正坐标系')
+                    print('this county need to correct wkid')
                     newSrRef = arcpy.SpatialReference(wkid)
                     arcpy.Project_management(JBNT_shp,transWkidJBNT,newSrRef)
                     print(arcpy.Describe(transWkidJBNT).spatialReference.factoryCode)
-                    print("--------------------------------------")
+                    print("wkid have corrected--------------------------------")
                 else:
                     arcpy.Copy_management(JBNT_shp,transWkidJBNT,"")
             # 合并图层
@@ -117,11 +117,14 @@ for coordinate in coordinate_list:
             else:
                 print(city)
                 print(county)
-                print('该区没有补划图斑,直接擦除')
+                print("this county don't have BHTB, only erase it")
 
     else:
+        n = n + 1
+        print(n)
         print(city)
         print(county)
         print("don't exist county dir")
         print("--------------------------")
+
 print("-------------------------Done!")
