@@ -457,39 +457,32 @@ def checkcountyDir(root_path):
         for county in getcountyInfo(city):
             # 对某个城市的每一个区进行循环
             county_code = county['county_code']
-            county_name = county['county'][:-1]  # 取得开头到倒数第一位的字符串（不含最后一位）
-            # print(county_name)
-            print('{0} {1}'.format(city, county_name))
+            county_name = county['county']
             matched = ''
             for dir in dirs:
                 # find dir that matched with county
-                if (dir.find(county_name) > -1):
+                if (dir.find(county_name[:-1]) > -1):
                     matched = dir
 
             # 如果condition为True，a = 1，否则 a = 2
             # a = 1 if condition else 2
             code_matched = "yes" if matched[:6] == county_code else "no"
-            name_matched = "yes" if matched[6:-1] == county_name else "partmatched" if matched[6: len(
-                matched) - 1] else "no"
+            name_matched = "yes" if matched[6:] == county_name else "no"
 
             # county目录不存在
             if matched == '':
                 print('{0} , {1}target dir does not exists.'.format(
-                    city, county))
+                    city, county['county']))
                 continue
             # countyname code都对应
             if (code_matched == "yes" and name_matched == "yes"):
-                print('{0} {1} code and name matched.'.format(city, county))
+                pass              
+            # countycode不对应
+            elif (code_matched == "no"):
+                print('{0} {1} countycode not matched'.format(city, county['county']))                
             # countyname部分对应
-            elif (name_matched == "partmatched"):
-                # countycode对应
-                if code_matched == "yes":
-                    print('{0} {1} code matched and name partmatched.'.format(
-                        city, county))
-                # countycode不对应
-                if code_matched == "no":
-                    print('{0} {1} code not matched, name partmatched.'.format(
-                        city, county))
+            elif (name_matched == "no"):
+                print('{0} {1} countyname partmatched.'.format(city, county['county']))  
 
     print("Dir checking---------------------Done!")
 
