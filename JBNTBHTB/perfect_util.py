@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import os
+from unittest import result
 from config import PATHS
 
 input_path = PATHS['input_path']
@@ -399,36 +400,35 @@ coordinate_list = [
         'name': "CGCS2000_3_Degree_GK_Zone_35", 'wkid': 4523}
 ]
 
+cities = {
+    u'成都市': '510100',
+    u'自贡市': '510300',
+    u'攀枝花市': '510400',
+    u'泸州市': '510500',
+    u'德阳市': '510600',
+    u'绵阳市': '510700',
+    u'广元市': '510800',
+    u'遂宁市': '510900',
+    u'内江市': '511000',
+    u'乐山市': '511100',
+    u'南充市': '511300',
+    u'眉山市': '511400',
+    u'宜宾市': '511500',
+    u'广安市': '511600',
+    u'达州市': '511700',
+    u'雅安市': '511800',
+    u'巴中市': '511900',
+    u'资阳市': '512000',
+    u'阿坝藏族羌族自治州': '513200',
+    u'甘孜藏族自治州': '513300',
+    u'凉山彝族自治州': '513400',
+}
+
 # 判断city code
 
 
 def getCitycode(cityname):
-    city = {
-        u'成都市': '510100',
-        u'自贡市': '510300',
-        u'攀枝花市': '510400',
-        u'泸州市': '510500',
-        u'德阳市': '510600',
-        u'绵阳市': '510700',
-        u'广元市': '510800',
-        u'遂宁市': '510900',
-        u'内江市': '511000',
-        u'乐山市': '511100',
-        u'南充市': '511300',
-        u'眉山市': '511400',
-        u'宜宾市': '511500',
-        u'广安市': '511600',
-        u'达州市': '511700',
-        u'雅安市': '511800',
-        u'巴中市': '511900',
-        u'资阳市': '512000',
-        u'阿坝藏族羌族自治州': '513200',
-        u'甘孜藏族自治州': '513300',
-        u'凉山彝族自治州': '513400',
-    }
-
-    # 明明可以这么写
-    # return city.get(cityname) or 'invalid city name'
+    return cities.get(cityname) or 'invalid city name'
 
 
 citiesname = [u'成都市', u'自贡市', u'攀枝花市', u'泸州市', u'德阳市',
@@ -448,16 +448,49 @@ def getcountyInfo(cityname):
 
 
 def checkcountyDir(root_path):
+    for city in cities.keys():
+        # 对每个城市进行循环
+        # cities 是一个字典，.keys()取得所有键名
+        if not os.path.exists(root_path + '/' + cities[city] + city):
+            continue
+        dirs = listdirInMac(root_path + '/' + cities[city] + city)
+        for county in getcountyInfo(city):
+            # 对某个城市的每一个区进行循环
+            county_code = county['county_code']
+            county_name = county['county'][:-1]  # 取得开头到倒数第一位的字符串（不含最后一位）
+            # print(county_name)
+            print('{0} {1}'.format(city, county_name))
+            matched = ''
+            for dir in dirs:
+                # find dir that matched with county
+                if (dir.find(county_name) > -1):
+                    matched = dir
 
-    dir_cities = listdirInMac(root_path)
+            # 如果condition为True，a = 1，否则 a = 2
+            # a = 1 if condition else 2
+            code_matched = "yes" if matched[:6] == county_code else "no"
+            name_matched = "yes" if matched[6:-1] == county_name else "partmatched" if matched[6: len(
+                matched) - 1] else "no"
 
-    for dir_city in dir_cities:
-        dir_cityname = dir_city[6:]
-        dir_counties = os.listdir(root_path + '/' + dir_city)  # county目录集合
-        counties = getcountyInfo(dir_cityname)
-        for county in counties:
-            countyname = county['county']
-            countycode = county['county_code']
+            # county目录不存在
+            if matched == '':
+                print('{0} , {1}target dir does not exists.'.format(
+                    city, county))
+                continue
+            # countyname code都对应
+            if (code_matched == "yes" and name_matched == "yes"):
+                print('{0} {1} code and name matched.'.format(city, county))
+            # countyname部分对应
+            elif (name_matched == "partmatched"):
+                # countycode对应
+                if code_matched == "yes":
+                    print('{0} {1} code matched and name partmatched.'.format(
+                        city, county))
+                # countycode不对应
+                if code_matched == "no":
+                    print('{0} {1} code not matched, name partmatched.'.format(
+                        city, county))
+
     print("Dir checking---------------------Done!")
 
 

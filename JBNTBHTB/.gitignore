@@ -5,4 +5,4 @@ input/*
 !input/.gitkeep
 output/*
 !output/.gitkeep
-
+.DS_Store
