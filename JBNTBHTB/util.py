@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import os
-from unittest import result
+import fnmatch
+from wsgiref.util import shift_path_info
 from config import PATHS
 
 input_path = PATHS['input_path']
@@ -295,6 +296,27 @@ def checkcountyDir(root_path):
 
     print("Dir checking---------------------Done!")
 
-
 JBNTpath = input_path + '/' + 'JBNT'
-checkcountyDir(JBNTpath)
+# checkcountyDir(JBNTpath)
+
+def modifyname (path):
+    citydirs = os.listdir(path)
+    for citydir in citydirs:
+        countydirs = (os.listdir(path + '/' + citydir))
+        for countydir in countydirs:
+            # if (countydir == '510104锦江区'):
+            countycode = countydir[:6]
+            filepath = path + '/' + citydir + '/' + countydir + '/' + u'1.矢量数据'
+            if not os.path.exists(filepath):
+                continue
+            else:
+                files = os.listdir(filepath)
+                for file in files:
+                    if fnmatch.fnmatchcase(file,"*JBNTBHTB.shp"):
+                        matchfile = countycode + '2014JBNTBHTB.shp'
+                        if fnmatch.fnmatchcase(file,matchfile):
+                            pass
+                        else:
+                            print(citydir,countydir,"有JBNTBHTB.shp文件,但是不是2014JBNTBHTB.shp")
+                    elif fnmatch.fnmatchcase(file,"*.mdb"):
+                        print(citydir,countydir,"没有JBNT shapefile文件")

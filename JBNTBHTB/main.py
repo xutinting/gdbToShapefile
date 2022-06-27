@@ -12,33 +12,6 @@ result_path = PATHS['result_path']
 BH_shp = input_path + '/' + u'四川占用补划20220530' + '/' + u'补划图斑.shp'
 arcpy.MakeFeatureLayer_management(BH_shp,'BH_shp')
 
-n = 0
-# 修改原数据countycode
-# JBNTdata_path = input_path + '/' + 'JBNT'
-# cities_path = os.listdir(JBNTdata_path)
-# for city_path in cities_path:
-#     citypath = os.path.join(JBNTdata_path,city_path)
-#     if os.path.isdir(citypath):        
-#         countys_path = os.listdir(citypath)
-#         for county_path in countys_path:
-#             countypath=os.path.join(citypath,county_path)
-#             if os.path.isdir(countypath):
-#                 # 此处获得县级目录，分割county_path，得到countyCode and countyName    
-#                 countyname= county_path[5:]
-#                 # 通过countyName在coordinate_list模糊查询，然后取得正确的cityName,countyCode,countyName,wkid
-#                 # 下面就接到你的逻辑，这里我们直接遍历数据目录，反过来到coordinate_list去查找正确元素，而不是直接遍历coordinate_list，去找数据
-
-# for coordinate in coordinate_list:
-#     city = coordinate['city']
-#     city_code = getCitycode(city)
-#     cityPath = city_code + city
-
-#     county_code = coordinate['county_code']
-#     county = coordinate['county']
-#     countyPath = county_code + county
-#     print(cityPath)
-#     print(countyPath)
-n = 0
 for coordinate in coordinate_list:
     city = coordinate['city']
     city_code = getCitycode(city)
