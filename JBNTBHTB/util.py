@@ -319,4 +319,4 @@ def modifyname (path):
                         else:
                             print(citydir,countydir,"有JBNTBHTB.shp文件,但是不是2014JBNTBHTB.shp")
                     elif fnmatch.fnmatchcase(file,"*.mdb"):
-                        print(citydir,countydir,"没有JBNT shapefile文件")
+                        print(citydir,countydir,"没有JBNT shapefile文件, 有mdb文件")
